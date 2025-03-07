@@ -20,7 +20,7 @@ from launch.actions import OpaqueFunction
 
 
 def echo_process(context: LaunchContext) -> list:  # noqa
-    return [LogInfo(msg="Simulation is done.")]
+    return [LogInfo(msg="Simulation completed")]
 
 
 def generate_launch_description() -> LaunchDescription:

@@ -20,7 +20,7 @@ from launch.actions import OpaqueFunction
 
 
 def echo_process(context: LaunchContext) -> list:  # noqa
-    return [LogInfo(msg="Pre-process is done.")]
+    return [LogInfo(msg="Pre-process completed")]
 
 
 def generate_launch_description() -> LaunchDescription:
