@@ -1,29 +1,39 @@
 import os
 from launch import LaunchDescription
-from launch.actions import RegisterEventHandler, LogInfo
+from launch.actions import RegisterEventHandler, LogInfo, ExecuteProcess
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    # launchファイルのパス
+    # パッケージのパス
     pkg_share = FindPackageShare('launch_opaque').find('launch_opaque')
     pre_process_path = os.path.join(pkg_share, 'launch', 'pre-process.launch.py')
     simulation_path = os.path.join(pkg_share, 'launch', 'simulation.launch.py')
     post_process_path = os.path.join(pkg_share, 'launch', 'post-process.launch.py')
 
-    # 各プロセスのlaunchファイルをインクルード
-    pre_process = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([pre_process_path])
+    # 各launch fileをExecuteProcessで起動
+    pre_process_cmd = ['ros2', 'launch', pre_process_path]
+    simulation_cmd = ['ros2', 'launch', simulation_path]
+    post_process_cmd = ['ros2', 'launch', post_process_path]
+
+    pre_process = ExecuteProcess(
+        cmd=pre_process_cmd,
+        output='screen',
+        name='pre_process'
     )
 
-    simulation = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([simulation_path])
+    simulation = ExecuteProcess(
+        cmd=simulation_cmd,
+        output='screen',
+        name='simulation'
     )
 
-    post_process = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([post_process_path])
+    post_process = ExecuteProcess(
+        cmd=post_process_cmd,
+        output='screen',
+        name='post_process'
     )
 
     # pre-processの終了を検知してsimulationを開始
@@ -51,5 +61,5 @@ def generate_launch_description():
     return LaunchDescription([
         pre_process,
         start_simulation,
-        start_post_process
+        start_post_process,
     ])
