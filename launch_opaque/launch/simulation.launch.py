@@ -17,9 +17,10 @@ from launch import LaunchContext
 from launch import LaunchDescription
 from launch.actions import LogInfo
 from launch.actions import OpaqueFunction
-
+import time
 
 def echo_process(context: LaunchContext) -> list:  # noqa
+    time.sleep(2)
     return [LogInfo(msg="Simulation completed")]
 
 
